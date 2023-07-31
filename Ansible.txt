@@ -1,0 +1,282 @@
+#Ansible hands-on
+
+create three amazon linux instances (ansible server, node 1, node 2)
+
+connect to all instances via putty & run following commands on -
+
+ansible server
+1. sudo su
+2. wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+3. yum install epel-release-latest-7.noarch.rpm
+4. yum update -y
+5. yum install git python python-level python-pip openssl ansible -y
+6. ansible --version
+7. configure hosts file to add nodes/servers which you want to connect with ansible-server
+vi /etc/ansible/hosts -> press i for insert, make a group with private ip's of nodes like
+
+[demo]
+172.31.46.228
+172.31.42.114
+
+press esc to exit insert mode
+type :wq and enter to save			:qa! to exit without save
+
+8. enable inventory/hosts & give root permissions to sudo user
+vi /etc/ansible/ansible.cfg
+uncomment inventory & sudo_user
+
+9. create user in all three instances
+adduser ansible
+passwd ansible          (iaminsane)
+
+10. switch to ansible user
+su - ansible
+
+11. give sudo rights to ansible user, come in root by exit
+run "sudo su" once to switch as root before "visudo"
+visudo
+add following line to Allow root to run any commands anywhere - 
+
+ansible ALL=(ALL) NOPASSWD: ALL
+
+12. configure ssh conection so that ansible sever can connect to nodes
+become root user by "sudo su"
+vi /etc/ssh/sshd_config
+in #Authentication, uncomment PermitRootLogin
+in #To disable tuneled clear password, uncomment first PasswordAuthentication and comment last PasswordAuthentication
+
+13. restart ssh service to apply changes done in step 12
+service sshd restart
+
+14. try connecting to nodes via server
+become ansible user on all instances
+ssh <private ip of node>
+
+------------------------------------------------------------------------------------------------ ctrl + L for clear------------------
+
+create trust relationship so that while doing ssh to nodes from server, we don't need to give password everytime
+trust relationship is between levels like root <--> root, user <--> user
+
+go to ansible server and create public and private keys
+run this command as ansible user
+
+ssh-keygen
+ls -a to display hidden files
+cd ..sh/
+ssh-copy-id user@<private ip of node>
+exmple -> ssh-copy-id ansible@172.31.42.114
+get out, cd..
+verify -> ssh 172.31.42.114 (now it won't ask password)
+
+--------------------------------------------------------------------------------------------------
+
+Host pattern
+
+ansible all --list-hosts (all hosts)
+ansible <group-name> --list-hosts (all hosts in group)
+ansible <group-name>[0] --list-hosts (first node in group)
+ansible <group-name>[-1] --list-hosts (last node in group)
+ansible <group-name>[-2] --list-hosts (second last node in group)
+ansible <group-name>[2:5] --list-hosts (from node3 to node6 in group; node3,4,5,6)
+
+groups seperated by colon can be used to use hosts from multiple groups
+ansible demo[1:5]:devops[2:10] --list-hosts
+
+-----------------------------------------------------------------------------------------------------
+
+ad-hoc commands - simple linux cmd , no idempotency (disadvantage -> does same work again and again by overriding)
+module - single work - idempotency present - uses YAML
+playbook - more than one module - idempotency present - uses YAML
+
+AD-HOC COMMANDS
+---------------
+ad-hoc commands
+ansible <group-name> -a "ls"
+ansible demo -a "ls"
+ansible all -a "touch yadavboy.txt"
+ansible demo -a "ls -al" -> long list with hidden files
+ansible demo -a "sudo yum install httpd -y"
+ansible demo -ba "yum remove httpd -y"
+
+ANSIBLE MODULES
+---------------
+ansible demo -b -m yum -a "pkg=httpd state=present" (install)
+ansible demo -b -m yum -a "pkg=httpd state=latest"	(update)
+ansible demo -b -m yum -a "pkg=httpd state=absent"	(uninstall)
+
+ansible demo -b -m service -a "name=httpd state=started"
+
+ansible demo -b -m user -a "name=udityadav"		(create user)
+
+ansible demo[-1] -b -m copy -a "src=copied_from_server.txt dest=/tmp"
+
+SETUP MODULE - idempotency is possible with help of setup module, when we run module or playbook, in background it goes to each node and check there current configuration like packages installed, files & folders etc.
+
+ansible demo -m setup
+ansible demo -m setup -a "filter=*ipv4*"
+
+YAML
+All YAML files must start with "---" and end with "..." (optional)
+
+TARGET, VARS, TASKS, HANDLERS are on same level
+
+Ansible Playbook
+-----------------
+create first playbook
+
+vi target.yml
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+--- # My first playbook with target section
+- hosts: demo
+  user: ansible	# this is username
+  become: yes	# to give sudo
+  connection: ssh
+  gather_facts: yes
+  
+  
+run playbook by
+ansible-playbook target.yml
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+--- # Target and task playbook
+- hosts: demo
+  user: ansible
+  become: yes
+  connection: ssh
+  tasks:
+          - name: Install HTTPD on server
+            action: yum name=httpd state=installed
+			
+------------------------------------------------------------------------------------------------------------------------------------------
+
+--- # My variable playbook
+- hosts: demo
+  user: ansible
+  become: yes
+  connection: ssh
+  vars:
+    pkgname: httpd
+  tasks:
+    - name: Install HTTPD on server
+      action: yum name='{{pkgname}}' state=installed
+	  
+------------------------------------------------------------------------------------------------------------------------------------------
+Handler section
+----------------
+Handler is like task only defined in handlers section, but it will run when called/notified by another task.
+
+Dry run
+--------
+Check whether the playbook is formatted correctly.
+ansible-playbook handlers.yml --check
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+--- # My handlers playbook
+- hosts: demo
+  user: ansible
+  become: yes
+  connection: ssh
+  tasks:
+    - name: Install HTTPD on node
+      action: yum name=httpd state=installed
+      notify: restart httpd		# should match with handlers name
+  handlers:
+    - name: restart httpd
+      action: service name=httpd state=restarted
+	  
+------------------------------------------------------------------------------------------------------------------------------------------
+
+--- # My loop playbook
+- hosts: demo
+  user: ansible
+  become: yes
+  connection: ssh
+  tasks:
+    - name: Add list of users in my nodes
+      user: name='{{item}}' state=present
+      with_items:
+              - udit_yadav
+              - umesh
+              - sachin
+              - tarun_yadav
+			  
+------------------------------------------------------------------------------------------------------------------------------------------
+
+--- # My conditions playbook
+- hosts: demo
+  user: ansible
+  become: yes
+  connection: ssh
+  tasks:
+    - name: Install apache server for debian family
+      command: apt-get -y install apache2
+      when: ansible_os_family == "Debian"
+    - name: Insall apache server for redhat family
+      command: yum -y install httpd
+      when: ansible_os_family == "RedHat"
+	  
+------------------------------------------------------------------------------------------------------------------------------------------
+
+Ansible Vault
+--------------
+to create encrypted playbook: ansible-vault create vault.yml
+to edit encrypted playbook: ansible-vault edit vault.yml
+to change password: ansible-vault rekey vault.yml
+to encrypt existing playbook: ansible-vault encrypt target.yml
+to decrypt playbook: ansible-vault decrypt target.yml
+
+Ansible Roles
+--------------
+Roles are good for organizing tasks and encapsulating data needed to achieve those goals.
+We can organize playbooks into a directory structure called roles.
+Adding more and more functionality to playbooks will make it difficult to maintain in a single file.
+
+Type of roles:
+
+1. Default: it stores the data about role/application. Default variables example -> if you want to run port 80 or 8080 then variables needs to be define in this path
+
+2. Files: it contains files needed to be transferred to the remote VM (static files)
+
+3. Meta: this directory contains files that establish role dependencies. Example -> author name, supported platform, dependencies if any.
+
+4. Handlers: this directory contains handlers.
+
+5. Tasks: this directory contains tasks.
+
+6. Vars: this directory contains variables.
+
+--------------------------------------------------------------------------
+
+[ansible@ip-172-31-33-53 ~]$ mkdir -p playbook/roles/my_role/tasks
+[ansible@ip-172-31-33-53 ~]$ cd playbook/
+[ansible@ip-172-31-33-53 playbook]$ touch roles/my_role/tasks/main.yml
+[ansible@ip-172-31-33-53 playbook]$ touch master.yml
+[ansible@ip-172-31-33-53 playbook]$ vi roles/my_role/tasks/main.yml
+- name: Install apache on RedHat
+  yum: pkg=httpd state=latest
+[ansible@ip-172-31-33-53 playbook]$ vi master.yml
+--- # master playbook for my_role
+- hosts: all
+  user: ansible
+  become: yes
+  connection: ssh
+  roles:
+    - my_role
+[ansible@ip-172-31-33-53 playbook]$ ansible-playbook master.yml
+
+Note: command to be run inside playbook directory
+
+--------------------------------------------------------------------------
+
+to install tree package: sudo yum install tree -y
+
+playbook
+│   ├── master.yml
+│   └── roles
+│       └── my_role
+│           └── tasks
+│               └── main.yml
