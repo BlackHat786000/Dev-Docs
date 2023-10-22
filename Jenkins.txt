@@ -77,10 +77,3 @@ jdk.tls.disabledAlgorithms=SSLv3, TLSv1, TLSv1.1, RC4, DES, MD5withRSA,
 ------------------------------------------------------------------------------------------------------------------------------------------
 Install GIT
 sudo yum install git-core
-
-REBOOK CUT LOSS
-REBOOK AS YOU WANT
-LAY THEN BACK CUT LOSS
-LAY THEN BACK AS YOU WANT
-ONE TIME LAY
-ONE TIME BACK
