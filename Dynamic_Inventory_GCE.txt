@@ -1,0 +1,35 @@
+1. Install dependencies (requests & google-auth)
+sudo yum install python-pip (For CentOS)
+sudo apt-get install python3-pip (For ubuntu)
+pip install requests google-auth
+pip show requests google-auth
+
+
+2. Create the YML inventory file (gcp.yml) and copy the below contents and please change the file according to your project and service account:
+
+---
+plugin: gcp_compute
+projects:
+          - [your_gcp_account]
+auth_kind: serviceaccount
+service_account_file: /etc/ansible/dynamic_inventory/service-account.json
+keyed_groups:
+  - key: labels
+    prefix: label
+  - key: zone
+    prefix: zone
+groups:
+  group_name: "'label_name' in (labels|list)"
+  
+
+3. Test
+ansible-inventory --list -i gcp.yml
+ansible-inventory -i gcp.yml --graph
+
+ansible remote -m ping
+
+Note - Configure ansible.cfg file if you don't want to specify inventory while running playbooks
+inventory = /etc/ansible/dynamic_inventory/gcp.yml
+ssh_args = -o StrictHostKeyChecking=no
+You can pass it as command line argument while running the playbook:
+ansible-playbook play.yml --ssh-common-args='-o StrictHostKeyChecking=no'

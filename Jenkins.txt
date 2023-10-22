@@ -1,0 +1,152 @@
+------------------------------------------------------------------------------------------------------------------------------------------
+Update your package manager's repository cache:
+sudo yum update -y
+
+Install Java
+sudo amazon-linux-extras install java-openjdk11 -y
+
+Install Maven
+sudo yum install maven
+
+Add the Jenkins repository and import its GPG key:
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+
+Install Jenkins:
+sudo yum install jenkins -y
+sudo yum install jenkins --nogpgcheck (If jenkins doesn't get installed -> Public key for jenkins-2.414.1-1.1.noarch.rpm is not installed)
+
+Start the Jenkins service and enable it to start on boot:
+sudo systemctl start jenkins
+sudo systemctl enable jenkins 
+
+Check Jenkins Service Status (Linux):
+sudo systemctl status jenkins
+
+Edit inbound rule of your ec2 security group
+custom tcp 		port 0 - 9000	everywhere
+
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
+Configure java home and maven home in jenkins on EC2
+Manage Jenkins -> Tools -> add jdk and maven home details
+
+Name - Java_Home
+JAVA_HOME - readlink -f /usr/bin/javac	(/usr/lib/jvm/java-17-amazon-corretto.x86_64)
+
+Name - Maven_Home
+MAVEN_HOME - /usr/share/maven
+
+
+vi /etc/sysconfig/jenkins => change JENKINS_USER to "root"
+
+
+RUN JENKINS AS ROOT USER TO EXECUTE SHELL SCRIPTS ON EC2
+chown -R root:root /var/lib/jenkins
+chown -R root:root /var/cache/jenkins
+chown -R root:root /var/log/jenkins
+
+service jenkins restart
+
+
+
+
+!!!! [WORKED]
+vi /usr/lib/systemd/system/jenkins.service change User=root Group=root
+systemctl daemon-reload
+systemctl restart jenkins
+
+
+Add these arguements to chrome options:
+
+options.addArguments("--no-sandbox");
+options.addArguments("--disable-dev-shm-usage");
+
+
+
+/usr/lib/jvm/java-17-amazon-corretto/conf/security
+sudo vi java.security
+
+
+For EMAIL to work in java 17:
+comment this line in the java.security file:
+
+jdk.tls.disabledAlgorithms=SSLv3, TLSv1, TLSv1.1, RC4, DES, MD5withRSA,
+    DH keySize < 1024, EC keySize < 224, 3DES_EDE_CBC, anon, NULL,
+    include jdk.disabled.namedCurves
+------------------------------------------------------------------------------------------------------------------------------------------
+Install GIT
+sudo yum install git-core
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+0 username
+1 password
+2 match url
+3 mode
+		
+4 punter lay team
+5 punter lay odds
+6 punter lay amount
+7 RLO
+8 RLA
+9 PBO
+10 PBA
+11 Email
+
+
+System.out.println("1. Standard lay");
+        System.out.println("2. Lay any");
+        System.out.println("3. Re-lay loss cut");
+        System.out.println("4. Re-lay as u want");
+        System.out.println("5. Lay -> back loss cut");
+        System.out.println("6. Lay -> back as u want");
+        System.out.println("7. One time lay");
+        System.out.println("8. One time back");
+		
+		
+username
+password
+match_url
+mode	
+punter_lay_team
+punter_lay_odds
+punter_lay_amount
+rebook_lay_odds
+rebook_lay_amount
+punter_back_odds
+punter_back_amount
+email
+
+
+STANDARD LAY
+AUTO LAY ANY
+REBOOK CUT LOSS
+REBOOK AS YOU WANT
+LAY THEN BACK CUT LOSS
+LAY THEN BACK AS YOU WANT
+ONE TIME LAY
+ONE TIME BACK
