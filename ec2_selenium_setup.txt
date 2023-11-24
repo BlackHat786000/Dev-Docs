@@ -1,0 +1,191 @@
+COMPLETE STEPS TO RUN SELENIUM SCRIPT ON Amazon Linux 2 AMI
+------------------------------------------------------------
+
+Install and configure putty
+----------------------------
+1. download and install putty for windows 64 bit
+2. session -> host name -> Public IPv4 address from aws ec2 console,
+3. Go to Connection -> SSH -> Auth -> Credentials -> Browse private key file for authentication
+IMPORTANT NOTE - Convert .pem file from AWS to .ppk (Putty Private Key) file using puttygen
+4. click on open -> login as: ec2-user
+5. You connect to EC2 Linux machine and can run cmds now....
+
+
+Save session to avoid re-entering host and ppk again and again :
+Step 1: right-click on the top of putty window and select 'Change settings'.
+Step 2: type the name of the session and save.
+That's it!. Enjoy!
+
+
+Send .jar files from your system to ec2-instance using FileZilla
+------------------------------------------------------------------
+Open FileZilla and go to File > Site Manager.
+Click on "New Site" to create a new site profile.
+Enter your EC2 instance's public DNS in the "Host" field.
+Set "Protocol" to "SFTP - SSH File Transfer Protocol".
+Set "Logon Type" to "Key file".
+In the "User" field, enter the username you use to connect to the EC2 instance (e.g. "ec2-user").
+In the "Key file" field, click on the "..." button to browse for your private key file (.ppk file). If you do not see this option, you may need to switch to "Advanced" mode by clicking on the button in the bottom left corner of the Site Manager window.
+Select your private key file and click "Open".
+Click "Connect" to connect to the EC2 instance.
+
+
+1. install java 15.0.2
+
+sudo yum update
+wget https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_linux-x64_bin.tar.gz
+tar -xvf openjdk-15.0.2_linux-x64_bin.tar.gz
+sudo mv jdk-15.0.2 /usr/local/
+export JAVA_HOME=/usr/local/jdk-15.0.2 (temporarily set java path)
+export PATH=$PATH:$JAVA_HOME/bin (temporarily set java path)
+java -version
+
+PERMANENT SOLUTION :
+--------------------
+a. Set JAVA_HOME in environment
+sudo nano /etc/environment
+-> add followig line : JAVA_HOME="/usr/local/jdk-15.0.2"
+-> Save the file by pressing Ctrl+X, then Y, then Enter.
+-> source /etc/environment (reload environment variable)
+-> echo $JAVA_HOME
+
+b. add PATH to shell startup script
+-> nano ~/.bash_profile
+-> append ":$JAVA_HOME/bin" at end of PATH variable
+(/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/ec2-user/.local/bin:/home/ec2-user/bin:/usr/local/jdk-15.0.2/bin)
+-> Save the file by pressing Ctrl+X, then Y, then Enter.
+-> source ~/.bash_profile (reload shell startup script)
+-> echo $PATH
+
+
+====================================RECOMMENDED WAY=======================================================================================
+sudo yum update -y
+wget https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_linux-x64_bin.tar.gz
+tar -xvf openjdk-15.0.2_linux-x64_bin.tar.gz
+sudo mv jdk-15.0.2 /usr/local/
+echo 'export JAVA_HOME=/usr/local/jdk-15.0.2' >> ~/.bashrc
+echo 'export PATH=$PATH:$JAVA_HOME/bin' >> ~/.bashrc
+source ~/.bashrc
+java -version
+
+==========================================================================================================================================
+
+2. install latest chrome - google-chrome --version
+
+sudo curl https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm -o google-chrome-stable_current_x86_64.rpm
+sudo yum localinstall google-chrome-stable_current_x86_64.rpm -y
+
+3. install latest chrome driver - chromedriver --version
+
+====================================RECOMMENDED WAY=======================================================================================
+RECOMMENDED - DOWNLOAD chromedriver-linux64.zip AS PER YOUR GOOGLE CHROME VERSION (google-chrome --version) FROM https://googlechromelabs.github.io/chrome-for-testing/#stable
+unzip chromedriver-linux64.zip
+sudo mv chromedriver /usr/local/bin/
+==========================================================================================================================================
+
+Basic Commands:
+cd / -> root -> home/ec2-user (default)
+cd /usr/local -> java
+cd /usr/local/bin -> chrome driver
+cd .. -> to go back
+
+
+Notes:
+chmod +x cb.sh -> to make linux script executable
+To create .script file, jsut paste command and save it with .sh extension.
+sudo killall -9 chromedriver
+java -jar /home/ec2-user/cb.jar
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Here are the steps to use tmux to run a Selenium script on a remote server even if you exit from Putty:
+
+Connect to your remote server using Putty or any other terminal emulator.
+
+Install tmux on your remote server if it's not already installed.  
+-> sudo yum install tmux
+-> Start a new tmux session by typing the command tmux in your terminal window. This will create a new tmux session with a single window.
+-> Start your Selenium script within the tmux session, as you would normally do in a regular terminal window.
+-> Detach from the tmux session by pressing Ctrl-b followed by d. This will return you to the normal terminal prompt while leaving the tmux session running in the background.
+-> Close your terminal window or disconnect from your remote server, as you normally would. The tmux session and your Selenium script will continue to run in the background.
+-> To reattach to the tmux session and check the status of your Selenium script, log back into your remote server and type the command tmux attach. This will reattach you to the existing tmux session and allow you to interact with the running Selenium script.
+
+
+To exit a tmux session, you can follow these steps:
+
+First, make sure you are inside the tmux session you want to exit. If you have multiple tmux sessions running, you can list them by typing tmux ls.
+Once you are inside the tmux session, type the following command: exit or Ctrl-d. This will terminate all the processes running inside the tmux session and close the session.
+Alternatively, you can also detach from the tmux session without terminating the processes by pressing Ctrl-b followed by d. This will leave the tmux session running in the background and return you to the terminal prompt.
+It's important to note that if you have any processes running inside the tmux session, they will be terminated when you exit the session. To avoid this, you should either detach from the session or stop the processes manually before exiting the tmux session.
+
+If you have multiple tmux sessions running, you can enter a specific session by following these steps:
+
+List the available tmux sessions by typing tmux ls in your terminal. This will show you a list of all active tmux sessions along with their names and IDs.
+
+Identify the name or ID of the tmux session you want to enter. The name of the session will be displayed in square brackets, like [my_session], while the ID will be a numeric value, like 0, 1, 2, and so on.
+
+To enter a specific tmux session, type the following command in your terminal: tmux attach -t <session_name_or_id>, where <session_name_or_id> is the name or ID of the tmux session you want to enter.
+
+For example, if you want to enter a tmux session named "my_session", you can type the command tmux attach -t my_session. If the session is already attached to another terminal, you will be prompted to choose between attaching to it or force it to detach from the other terminal.
+
+If you prefer, you can also use the tmux switch-client -t <session_name_or_id> command to switch to a different tmux session without detaching from the current one. This command will allow you to quickly move between multiple tmux sessions within the same terminal window.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+here are the steps for using Termius to connect to an EC2 Linux instance on an Android device:
+
+Install the Termius app from the Google Play Store on your Android device.
+
+Open the Termius app and sign up for a free account or sign in if you already have one.
+
+Once you are signed in, tap on the + icon at the bottom of the screen to create a new host.
+
+Enter the details for your EC2 Linux instance, including the hostname or IP address, port number, and username. If you are using SSH key authentication, you can add your private key file by tapping on the Authentication option and selecting Private Key from the list.
+
+Once you have entered the details, tap on the Save button to save the host.
+
+To connect to the EC2 instance, tap on the host name in the list, and then tap on the Connect button.
+
+If this is your first time connecting to the EC2 instance from Termius, you may be prompted to add the instance to your known_hosts file. Tap on the Yes button to continue.
+
+Once you are connected, you can run commands on the EC2 instance from the Termius terminal as you would in a regular SSH session.
+
+That's it! You should now be able to connect to your EC2 Linux instance using Termius on your Android device. Note that some advanced features, such as port forwarding and remote desktop access, may require a paid upgrade to the app.
+
+
+Some useful cmds to set up web server
+
+
+If get any permission related issues
+sudo chmod 644 /var/www/html/index.html
+sudo chmod 644 /var/www/html/calculate.php
+sudo chmod 755 /home/ec2-user/Calculator.jar
+
+which java
+
+sudo yum install httpd
+sudo yum install php
+sudo systemctl restart httpd
+
+sudo service httpd status
+sudo service httpd start / sudo service httpd restart
+
+sudo tail -n 50 /var/log/httpd/error_log
+
+sudo mv /home/ec2-user/calculate.php /var/www/html/
+
+
+
+UPDATE EC2 TIMEZONE TO IST
+sudo timedatectl set-timezone Asia/Kolkata
+
+
+Schedule job at date time
+at 04:31 2023-09-23 -f cbj.sh
+
+List all jobs
+atq
+
+Delete jobs
+atrm 1 2
