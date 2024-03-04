@@ -1,0 +1,1 @@
+1. sharing variables between plays might make your playbook less modular and harder to understand, so it's generally a good practice to design your plays to be as independent as possible.
