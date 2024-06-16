@@ -1,0 +1,13 @@
+npm install --save-dev parcel-bundler
+
+Update package.json:
+Add a script to your package.json file to run Parcel:
+
+"scripts": {
+    "start": "parcel index.js --target node",
+    "build": "parcel build index.js --target node"
+}
+
+npm run build
+
+npm start

@@ -1,0 +1,58 @@
+To install Docker on an Amazon EC2 instance running Ubuntu, follow these steps:
+
+Update the package index and install prerequisites:
+sudo apt-get update
+sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+
+Add Docker’s official GPG key:
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+Set up the Docker repository:
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+Update the package index again:
+sudo apt-get update
+
+Install Docker CE (Community Edition):
+sudo apt-get install -y docker-ce
+
+Verify that Docker is installed correctly by running the hello-world image:
+sudo docker run hello-world
+
+
+(Optional) Manage Docker as a non-root user:
+
+Create a Docker group if it doesn’t already exist:
+sudo groupadd docker
+
+Add your user to the Docker group:
+sudo usermod -aG docker $USER
+
+Log out and log back in so that your group membership is re-evaluated, or use the following command to activate the changes to groups:
+newgrp docker
+
+Enable Docker to start on boot:
+sudo systemctl enable docker
+
+Your Docker installation on an Amazon EC2 Ubuntu instance should now be complete. You can start using Docker to manage containers on your EC2 instance.
+
+verify docker running as non-root again
+docker run hello-world
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Stop all running containers
+sudo docker stop $(sudo docker ps -aq)
+
+# Remove all containers
+sudo docker rm $(sudo docker ps -aq)
+
+# (Optional) Remove all images
+sudo docker rmi $(sudo docker images -q)
+
+# (Optional) Remove all volumes
+sudo docker volume rm $(sudo docker volume ls -q)
+
+# (Optional) Remove all networks
+sudo docker network rm $(sudo docker network ls -q)

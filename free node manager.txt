@@ -1,0 +1,47 @@
+Run below cmd in powershell to set fnm env variable first
+PS C:\Users\yadav> fnm env --use-on-cd | Out-String | Invoke-Expression
+
+
+PS C:\Users\yadav> fnm ls
+* v20.14.0 default, lts-latest
+* system
+PS C:\Users\yadav> fnm use v20.14.0
+Using Node v20.14.0
+PS C:\Users\yadav> node --version
+v20.14.0
+PS C:\Users\yadav> npm --version
+10.7.0
+
+Tutorial
+https://www.freecodecamp.org/news/fnm-fast-node-manager/
+
+
+# Listing all remote versions
+fnm ls-remote
+
+# Listing all installed ones
+fnm ls
+
+# Installing
+fnm install <version>
+
+# Uninstalling
+fnm uninstall <version>
+
+# Installing node of the latest LTS version
+fnm install --lts
+
+# Setting an alias
+fnm alias <version> <name>
+
+# Shortcut for setting 'default' as an alias
+fnm default <version>
+
+# Removing an alias
+fnm unalias <name>
+
+# Using a Node of a particular version
+fnm use <version>
+
+# Displaying the version of currently used Node
+fnm current
