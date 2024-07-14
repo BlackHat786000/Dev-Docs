@@ -5,10 +5,17 @@ git log
 git tag v1.0.0 14b875a7b232462d7b77f0a245cc79eeb86b4fbf
 
 // annotated tag
-git tag -a v1.0.0 14b875a7b232462d7b77f0a245cc79eeb86b4fbf -m "Release version 1.0.0"
+git tag -a v3.0.0 b56c2959f82e04d54b17c01cff0eeded7a389413 -m "Release version 3.0.0"
 
 // push tag to remote
-git push origin v1.0.0
+git push origin v3.0.0
 
 // push all tags
 git push --tags
+
+
+// push your custom action to github
+git add action.yml dist/index.js node_modules/*
+git commit -m "Use vercel/ncc"
+git tag -a -m "My first action release" v1.1
+git push --follow-tags

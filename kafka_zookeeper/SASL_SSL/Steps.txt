@@ -1,0 +1,35 @@
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Generate the CA's Private Key and Self-Signed Certificate
+openssl req -new -x509 -keyout ca-key -out ca-cert -days 365
+
+# Generate the Kafka Broker's Keystore (CN can be server FQDN / localhost / public DNS of your EC2 instance / public IP address of your EC2 instance)
+keytool -genkey -alias kafka -keyalg RSA -keystore kafka.server.keystore.jks -validity 365 -storepass password -keypass password -dname "CN=ec2-3-110-37-170.ap-south-1.compute.amazonaws.com, OU=YourOrg, O=YourCompany, L=YourCity, S=YourState, C=YourCountry"
+
+# Generate a Certificate Signing Request (CSR) from the Keystore
+keytool -certreq -alias kafka -keystore kafka.server.keystore.jks -file cert-file -storepass password -keypass password
+
+# Sign the CSR with the CA Certificate
+openssl x509 -req -CA ca-cert -CAkey ca-key -in cert-file -out cert-signed -days 365 -CAcreateserial
+
+# Import the CA Certificate into the Kafka Broker's Truststore (Create a truststore and import the CA certificate)
+keytool -import -alias CARoot -keystore kafka.server.truststore.jks -file ca-cert -storepass password
+
+# Import the CA Certificate into the Kafka Broker's Keystore (This step ensures that the CA certificate is recognized by the keystore)
+keytool -import -alias CARoot -keystore kafka.server.keystore.jks -file ca-cert -storepass password
+
+# Import the Signed Certificate Back into the Kafka Broker's Keystore
+keytool -import -alias kafka -keystore kafka.server.keystore.jks -file cert-signed -storepass password -keypass password
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Test SSL Connection. Finally, test the SSL connection to ensure everything is set up correctly:
+openssl s_client -connect ec2-3-110-37-170.ap-south-1.compute.amazonaws.com:9092 -CAfile ca-cert
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Convert PEM to CRT
+openssl x509 -outform der -in file.pem -out file.crt
+
+# Convert CRT to PEM
+openssl x509 -inform der -in file.crt -out file.pem

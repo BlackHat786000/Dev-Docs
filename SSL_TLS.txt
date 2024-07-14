@@ -1,0 +1,59 @@
+Here’s a step-by-step breakdown of the process:
+
+Server Certificate Creation:
+============================
+The server generates a key pair consisting of a public key and a private key.
+The server creates a Certificate Signing Request (CSR), which includes its public key and other identifying information (e.g., domain name, organization details).
+
+
+Certificate Signing by CA:
+==========================
+The CSR is sent to a trusted Certificate Authority (CA).
+The CA verifies the server’s identity and domain ownership through various validation methods.
+Upon successful validation, the CA signs the CSR with its private key, creating a digital signature. This signed certificate includes:
+Server’s public key
+Server’s identity information
+Validity period
+Issuer (the CA) information
+Digital signature created with the CA’s private key
+Certificate Distribution:
+
+The CA sends the signed certificate back to the server.
+The server uses this certificate to prove its identity during the SSL/TLS handshake.
+
+
+Client Verification:
+=====================
+When a client (e.g., a web browser) connects to the server over HTTPS, the server sends its certificate to the client.
+The client already possesses the public keys of trusted CAs (root certificates) that are pre-installed in the browser or operating system.
+
+
+Digital Signature Verification:
+================================
+The client extracts the public key of the CA from its pre-installed root certificates.
+Using this public key, the client decrypts the digital signature included in the server’s certificate.
+If the decryption is successful, the client knows that the signature was created with the CA’s private key (as only the CA's private key can create a matching signature for the included data).
+This verifies that the server’s certificate was indeed issued by a trusted CA and that the certificate itself hasn't been tampered with since it was signed.
+Trust Decision:
+
+Based on this verification, the client decides whether to trust the server’s identity and proceed with the secure connection.
+If any part of the verification process fails (e.g., the signature doesn’t match, the certificate is expired, or the CA is not trusted), the client will display a warning or error to the user.
+
+
+
+============================================================= ENCRYPTION OF DATA EXCHANGED BETWEEN CLIENT AND SERVER ================================================
+
+Client Encrypts Data with Public Key:
+======================================
+Once the certificate is verified, the client generates a symmetric session key (used for the actual data transfer).
+The client encrypts the session key with the server's public key and sends it to the server.
+
+
+Server Decrypts with Private Key:
+=====================================
+The server uses its private key to decrypt the session key.
+Now both the client and the server share the same symmetric session key, which can be used for secure communication.
+Secure Data Transfer:
+
+All subsequent data exchanged between the client and server is encrypted using the symmetric session key.
+Symmetric encryption is used for the actual data transfer because it is faster and more efficient than asymmetric encryption.
