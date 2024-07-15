@@ -5,7 +5,7 @@ git log
 git tag v1.0.0 14b875a7b232462d7b77f0a245cc79eeb86b4fbf
 
 // annotated tag
-git tag -a v4.0.0 2ee8d94b075d013148c2b652b66103f08daf051c -m "Release version 4.0.0"
+git tag -a v2.0 c0397e441fd3ab0de0f73ab084c867b5ee137200 -m "Release version 2.0"
 
 // push tag to remote
 git push origin v4.0.0
@@ -19,3 +19,18 @@ git add action.yml dist/index.js node_modules/*
 git commit -m "Use vercel/ncc"
 git tag -a -m "Release version 2.0" v2.0
 git push --follow-tags
+
+
+// Steps to Point an Existing Tag to a Specific Commit
+
+# Delete the local tag
+git tag -d <tag-name>
+
+# Create the tag at the specific commit
+git tag -a <tag-name> <commit-hash> -m "Tagging specific commit"
+
+# Delete the remote tag
+git push origin --delete <tag-name>
+
+# Push the new tag to the remote repository
+git push origin <tag-name>

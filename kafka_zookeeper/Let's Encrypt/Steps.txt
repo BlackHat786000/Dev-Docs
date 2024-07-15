@@ -1,0 +1,34 @@
+# Register your ec2 ip on duckdns and get a domain like absurvey.duckdns.org
+# Install simple webserver (dont start it) on your ec2 so that certbot can complete the verification challenge on port 80 (all inbound on port 80)
+
+# get a certificate signed by let's encrypt for your server
+sudo certbot certonly --standalone -d absurvey.duckdns.org
+
+# Create a PKCS12 keystore
+openssl pkcs12 -export -in fullchain.pem -inkey privkey.pem -out kafka.p12 -name kafka_ssl -password pass:password
+
+# Convert PKCS12 to JKS
+keytool -importkeystore -srckeystore kafka.p12 -srcstoretype PKCS12 -destkeystore kafka.keystore.jks -deststoretype JKS -srcstorepass password -deststorepass password
+
+# Download Let's Encrypt Root CA Certificate:
+curl -o isrgrootx1.pem https://letsencrypt.org/certs/isrgrootx1.pem
+
+# Create the TrustStore:
+keytool -importcert -file isrgrootx1.pem -keystore kafka.truststore.jks -storepass password -alias letsencrypt-ca -noprompt
+
+# Verify the SSL handshake
+openssl s_client -connect absurvey.duckdns.org:9094 -CAfile isrgrootx1.pem
+
+
+#####################################################################################################################################################################
+
+#(give exact hostname as given while creating the certificate, otherwise CERTIFICATE_UNKNOWN exception)
+#(hostname verification if ssl.endpoint.identification.algorithm=HTTPS)
+#spring.kafka.bootstrap-servers=absurvey.duckdns.org:9094
+spring.kafka.properties.ssl.endpoint.identification.algorithm=HTTPS
+
+spring.kafka.bootstrap-servers=3.110.37.170:9094
+#(disable exact hostname validation)
+spring.kafka.properties.ssl.endpoint.identification.algorithm=
+
+#####################################################################################################################################################################
