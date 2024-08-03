@@ -1,13 +1,10 @@
-npm install --save-dev parcel-bundler
+Install Parcel with npm i -g parcel, then, add this to your package.json:
 
-Update package.json:
-Add a script to your package.json file to run Parcel:
+  "main": "dist/index.js",
+  "targets": {
+    "main": {
+      "includeNodeModules": true
+    },
+  },
 
-"scripts": {
-    "start": "parcel index.js --target node",
-    "build": "parcel build index.js --target node"
-}
-
-npm run build
-
-npm start
+Then run parcel build index.js. That's it!

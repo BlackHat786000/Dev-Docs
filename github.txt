@@ -5,10 +5,10 @@ git log
 git tag v1.0.0 14b875a7b232462d7b77f0a245cc79eeb86b4fbf
 
 // annotated tag
-git tag -a v2.0 c0397e441fd3ab0de0f73ab084c867b5ee137200 -m "Release version 2.0"
+git tag -a v4.0 ce1c659024b10f055ec5a650a6cb95fef8114df3 -m "Release version 4.0"
 
 // push tag to remote
-git push origin v4.0.0
+git push origin v3.0
 
 // push all tags
 git push --tags
