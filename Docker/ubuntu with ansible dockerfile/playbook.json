@@ -1,0 +1,39 @@
+[
+  {
+    "hosts": "localhost",
+    "gather_facts": false,
+    "tasks": [
+      {
+        "name": "Perform a GET request to fetch posts",
+        "uri": {
+          "url": "https://jsonplaceholder.typicode.com/posts",
+          "method": "GET",
+          "return_content": true,
+          "headers": {
+            "Accept": "application/json"
+          }
+        },
+        "register": "get_response"
+      },
+      {
+        "name": "Perform a POST request to create a post using data from GET response",
+        "uri": {
+          "url": "https://jsonplaceholder.typicode.com/posts",
+          "method": "POST",
+          "body_format": "json",
+          "body": {
+            "title": "foo",
+            "body": "{{ get_response.json[0].body }}",
+            "userId": "{{ get_response.json[0].userId }}"
+          },
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "return_content": true,
+          "status_code": [200, 201]
+        },
+        "register": "post_response"
+      }
+    ]
+  }
+]
