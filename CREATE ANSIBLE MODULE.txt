@@ -7,7 +7,7 @@ sudo apt update
 sudo apt install build-essential libssl-dev libffi-dev python3
 git clone https://github.com/ansible/ansible.git
 cd ansible
-python3 -m venv venv -> install virtualenv package
+python3 -m venv venv (install virtualenv package if not installed using `sudo apt install python3-venv`)
 . venv/bin/activate
 pip install -r requirements.txt
 . hacking/env-setup

@@ -1,0 +1,19 @@
+Setup
+======
+Create python virtual environment
+	python3 -m venv venv
+	source venv/bin/activate
+
+Install ansible lint
+	pip install --upgrade pip
+	pip install ansible-lint
+	ansible-lint --version
+
+
+Usage
+======
+ansible-lint <playbook.yml>  (to lint specific playbook)
+ansible-lint  (to lint all playbooks in current directory)
+
+ansible-lint <playbook.yml> --fix  (to autofix specific playbook)
+ansible-lint --fix  (to autofix all playbooks in current directory)
