@@ -1,0 +1,32 @@
+[
+	{
+		"hosts": "localhost",
+		"gather_facts": false,
+		"tasks": [
+			{
+				"name": "Perform a GET request",
+				"uri": {
+					"url": "https://jsonplaceholder.typicode.com/posts",
+					"method": "GET",
+					"return_content": true,
+					"headers": {
+						"Accept": "application/json"
+					}
+				},
+				"register": "get_response"
+			}
+		]
+	},
+	{
+		"hosts": "localhost",
+		"gather_facts": false,
+		"tasks": [
+			{
+				"name": "Print a message",
+				"debug": {
+					"msg": "Hello world !!!"
+				}
+			}
+		]
+	}
+]

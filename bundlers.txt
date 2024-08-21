@@ -1,4 +1,7 @@
-Install Parcel with npm i -g parcel, then, add this to your package.json:
+1) npx @vercel/ncc build index.js -o dist
+
+
+2) Install Parcel with npm i -g parcel, then, add this to your package.json:
 
   "main": "dist/index.js",
   "targets": {
