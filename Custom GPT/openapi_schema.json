@@ -1,0 +1,2509 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Serena",
+    "description": "CRITICAL: Before starting to work on a coding task, call the `initial_instructions` tool to read the 'Serena Instructions Manual'.",
+    "version": "1.27.0"
+  },
+  "servers": [
+    {
+      "url": "https://don-naples-eventually-south.trycloudflare.com"
+    }
+  ],
+  "paths": {
+    "/create_text_file": {
+      "post": {
+        "summary": "Create Text File",
+        "description": "Write a new file or overwrite an existing file. Returns a message indicating success or failure.",
+        "operationId": "tool_create_text_file_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/create_text_file_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/create_text_file_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool Create Text File Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/replace_content": {
+      "post": {
+        "summary": "Replace Content",
+        "description": "Replaces content in files. Preferred for smaller edits where symbol-level tools aren't appropriate.\nUse mode \"regex\" with wildcards (.*?) to match large sections efficiently: \"beginning.*?end\" instead of specifying exact content.\nEssential for multi-line replacements.",
+        "operationId": "tool_replace_content_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/replace_content_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/replace_content_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool Replace Content Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/replace_symbol_body": {
+      "post": {
+        "summary": "Replace Symbol Body",
+        "description": "Replaces the body of the given symbol.\n\nIMPORTANT: Only replace symbol bodies if you have previously made a retrieval with include_body=True and thus know what\nconstitutes the body!.",
+        "operationId": "tool_replace_symbol_body_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/replace_symbol_body_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/replace_symbol_body_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool Replace Symbol Body Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/insert_after_symbol": {
+      "post": {
+        "summary": "Insert After Symbol",
+        "description": "Use this to insert code after a class/method/function definition.\nDon't use to insert after assignments (constants, fields).",
+        "operationId": "tool_insert_after_symbol_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/insert_after_symbol_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/insert_after_symbol_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool Insert After Symbol Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/insert_before_symbol": {
+      "post": {
+        "summary": "Insert Before Symbol",
+        "description": "Inserts the given content before the beginning of the definition of the given symbol (via the symbol's location).\nA typical use case is to insert a new class, function, method, field or variable assignment; or\na new import statement before the first symbol in the file.",
+        "operationId": "tool_insert_before_symbol_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/insert_before_symbol_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/insert_before_symbol_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool Insert Before Symbol Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/read_file": {
+      "post": {
+        "summary": "Read File",
+        "description": "Reads the given file or a chunk of it. Returns the full text of the file at the given relative path.",
+        "operationId": "tool_read_file_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/read_file_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/read_file_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool Read File Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/list_dir": {
+      "post": {
+        "summary": "List Dir",
+        "description": "Lists files and directories in the given directory (optionally with recursion). Returns a JSON object with the names of directories and files within the given directory.",
+        "operationId": "tool_list_dir_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/list_dir_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/list_dir_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool List Dir Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/find_file": {
+      "post": {
+        "summary": "Find File",
+        "description": "Finds non-gitignored files matching the given file mask within the given relative path. Returns a JSON object with the list of matching files.",
+        "operationId": "tool_find_file_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/find_file_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/find_file_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool Find File Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/search_for_pattern": {
+      "post": {
+        "summary": "Search For Pattern",
+        "description": "Flexible pattern search across codebase. Prefer symbolic operations when possible.\nUses DOTALL matching. Use non-greedy quantifiers (.*?) to avoid over-matching.\nSupports file filtering via globs and code-only restriction.",
+        "operationId": "tool_search_for_pattern_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/search_for_pattern_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/search_for_pattern_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool Search For Pattern Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/get_symbols_overview": {
+      "post": {
+        "summary": "Get Symbols Overview",
+        "description": "Use this tool to get a high-level understanding of the code symbols in a file.\nThis should be the first tool to call when you want to understand a new file, unless you already know\nwhat you are looking for. Returns a JSON object containing symbols grouped by kind in a compact format.",
+        "operationId": "tool_get_symbols_overview_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/get_symbols_overview_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/get_symbols_overview_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool Get Symbols Overview Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/find_symbol": {
+      "post": {
+        "summary": "Find Symbol",
+        "description": "Retrieves symbols matching `name_path_pattern` in a file.\nUse `depth > 0` to include children. `name_path_pattern` can be: \"foo\": any symbol named \"foo\"; \"foo/bar\": \"bar\" within \"foo\"; \"/foo/bar\": only top-level \"foo/bar\". Returns symbols (with locations) matching the name.",
+        "operationId": "tool_find_symbol_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/find_symbol_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/find_symbol_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool Find Symbol Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/find_referencing_symbols": {
+      "post": {
+        "summary": "Find Referencing Symbols",
+        "description": "Finds references to the symbol at the given `name_path`. The result will contain metadata about the referencing symbols\nas well as a short code snippet around the reference. Returns a list of JSON objects with the symbols referencing the requested symbol.",
+        "operationId": "tool_find_referencing_symbols_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/find_referencing_symbols_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/find_referencing_symbols_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool Find Referencing Symbols Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/find_implementations": {
+      "post": {
+        "summary": "Find Implementations",
+        "description": "Finds implementations of the symbol at the given `name_path`. Returns a list of JSON objects with the symbols implementing the requested symbol.",
+        "operationId": "tool_find_implementations_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/find_implementations_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/find_implementations_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool Find Implementations Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/find_declaration": {
+      "post": {
+        "summary": "Find Declaration",
+        "description": "Finds the declaration of a symbol.",
+        "operationId": "tool_find_declaration_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/find_declaration_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/find_declaration_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool Find Declaration Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/get_diagnostics_for_file": {
+      "post": {
+        "summary": "Get Diagnostics For File",
+        "description": "Gets diagnostics for a file. Diagnostics are grouped as `relative_path -> severity -> name_path -> diagnostics_results`.\nIf a diagnostic cannot be mapped to a symbol, it is grouped under the special name path `<file>`. Returns grouped diagnostics for the requested file.",
+        "operationId": "tool_get_diagnostics_for_file_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/get_diagnostics_for_file_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/get_diagnostics_for_file_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool Get Diagnostics For File Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/rename_symbol": {
+      "post": {
+        "summary": "Rename Symbol",
+        "description": "Renames the symbol with the given `name_path` to `new_name` throughout the entire codebase.\nNote: for languages with method overloading, like Java, name_path may have to include a method's\nsignature to uniquely identify a method. Returns result summary indicating success or failure.",
+        "operationId": "tool_rename_symbol_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/rename_symbol_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/rename_symbol_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool Rename Symbol Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/safe_delete_symbol": {
+      "post": {
+        "summary": "Safe Delete Symbol",
+        "description": "Deletes the symbol if it is safe to do so (i.e., if there are no references to it)\nor returns a list of references to it.",
+        "operationId": "tool_safe_delete_symbol_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/safe_delete_symbol_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/safe_delete_symbol_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool Safe Delete Symbol Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/write_memory": {
+      "post": {
+        "summary": "Write Memory",
+        "description": "Write information about this project that can be useful for future tasks in md format.\nThe name should be meaningful and can include \"/\" to organize into topics.\nIf explicitly instructed, use the \"global/\" prefix for writing a memory that is shared across projects.",
+        "operationId": "tool_write_memory_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/write_memory_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/write_memory_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool Write Memory Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/read_memory": {
+      "post": {
+        "summary": "Read Memory",
+        "description": "Use to read a memory that is likely to be relevant to the current task, inferring relevance e.g. from the name.",
+        "operationId": "tool_read_memory_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/read_memory_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/read_memory_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool Read Memory Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/list_memories": {
+      "post": {
+        "summary": "List Memories",
+        "description": "Lists available memories, optionally filtered by topic.",
+        "operationId": "tool_list_memories_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/list_memories_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/list_memories_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool List Memories Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/delete_memory": {
+      "post": {
+        "summary": "Delete Memory",
+        "description": "Delete a memory, only call if instructed explicitly or permission was granted by the user.",
+        "operationId": "tool_delete_memory_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/delete_memory_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/delete_memory_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool Delete Memory Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/rename_memory": {
+      "post": {
+        "summary": "Rename Memory",
+        "description": "Rename or move a memory, use \"/\" in the name to organize into topics.\nThe \"global\" topic should only be used if explicitly instructed.\nReferences to other memories that are marked with the `mem:` prefix will be updated accordingly.\nReferences in read-only memories are not affected.",
+        "operationId": "tool_rename_memory_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/rename_memory_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/rename_memory_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool Rename Memory Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/edit_memory": {
+      "post": {
+        "summary": "Edit Memory",
+        "description": "Replace content matching a regular expression in a memory.",
+        "operationId": "tool_edit_memory_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/edit_memory_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/edit_memory_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool Edit Memory Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/execute_shell_command": {
+      "post": {
+        "summary": "Execute Shell Command",
+        "description": "Execute a shell command and return its output. If there is a memory about suggested commands, read that first.\nNever execute unsafe shell commands!\nIMPORTANT: Do not use this tool to start\n  * long-running processes (e.g. servers) that are not intended to terminate quickly",
+        "operationId": "tool_execute_shell_command_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/execute_shell_command_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/execute_shell_command_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool Execute Shell Command Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/activate_project": {
+      "post": {
+        "summary": "Activate Project",
+        "description": "Activates the project with the given name or path.",
+        "operationId": "tool_activate_project_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/activate_project_form_model"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/activate_project_response_model"
+                    },
+                    {}
+                  ],
+                  "title": "Response Tool Activate Project Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/get_current_config": {
+      "post": {
+        "summary": "Get Current Config",
+        "description": "Print the current configuration of the agent, including the active and available projects, tools, contexts, and modes.",
+        "operationId": "tool_get_current_config_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/onboarding": {
+      "post": {
+        "summary": "Onboarding",
+        "description": "Call this tool if onboarding was not performed yet.\nYou will call this tool at most once per conversation. Returns instructions on how to create the onboarding information.",
+        "operationId": "tool_onboarding_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/initial_instructions": {
+      "post": {
+        "summary": "Initial Instructions",
+        "description": "Provides the 'Serena Instructions Manual', which contains essential information on how to use the Serena toolbox.\nIMPORTANT: If you have not yet read the manual, call this tool immediately after you are given your task by the user,\nas it will critically inform you!.",
+        "operationId": "tool_initial_instructions_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "activate_project_form_model": {
+        "properties": {
+          "project": {
+            "type": "string",
+            "title": "Project",
+            "description": "The name of a registered project to activate or a path to a project directory."
+          }
+        },
+        "type": "object",
+        "required": [
+          "project"
+        ],
+        "title": "activate_project_form_model"
+      },
+      "activate_project_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "activate_project_response_model"
+      },
+      "create_text_file_form_model": {
+        "properties": {
+          "relative_path": {
+            "type": "string",
+            "title": "Relative Path",
+            "description": "The relative path to the file to create."
+          },
+          "content": {
+            "type": "string",
+            "title": "Content",
+            "description": "The (appropriately encoded) content to write to the file."
+          }
+        },
+        "type": "object",
+        "required": [
+          "relative_path",
+          "content"
+        ],
+        "title": "create_text_file_form_model"
+      },
+      "create_text_file_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "create_text_file_response_model"
+      },
+      "delete_memory_form_model": {
+        "properties": {
+          "memory_name": {
+            "type": "string",
+            "title": "Memory Name",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "memory_name"
+        ],
+        "title": "delete_memory_form_model"
+      },
+      "delete_memory_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "delete_memory_response_model"
+      },
+      "edit_memory_form_model": {
+        "properties": {
+          "memory_name": {
+            "type": "string",
+            "title": "Memory Name",
+            "description": "The name of the memory."
+          },
+          "needle": {
+            "type": "string",
+            "title": "Needle",
+            "description": "The string or regex pattern to search for. In regex mode, be careful to not replace too much!\nIf `mode` is \"literal\", this string will be matched exactly.\nIf `mode` is \"regex\", this string will be treated as a regular expression (syntax of Python's `re` module,\nwith the MULTILINE and DOTALL flags enabled)."
+          },
+          "repl": {
+            "type": "string",
+            "title": "Repl",
+            "description": "The replacement string (verbatim)."
+          },
+          "mode": {
+            "type": "string",
+            "title": "Mode",
+            "description": "Either \"literal\" or \"regex\", specifying how the `needle` parameter is to be interpreted."
+          },
+          "allow_multiple_occurrences": {
+            "type": "boolean",
+            "title": "Allow Multiple Occurrences",
+            "description": "Whether to allow matching and replacing multiple occurrences.\nIf false and multiple occurrences are found, an error will be returned.",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "memory_name",
+          "needle",
+          "repl",
+          "mode"
+        ],
+        "title": "edit_memory_form_model"
+      },
+      "edit_memory_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "edit_memory_response_model"
+      },
+      "execute_shell_command_form_model": {
+        "properties": {
+          "command": {
+            "type": "string",
+            "title": "Command",
+            "description": "The shell command to execute."
+          },
+          "cwd": {
+            "type": "string",
+            "title": "Cwd",
+            "description": "The working directory to execute the command in. If None, the project root will be used."
+          },
+          "capture_stderr": {
+            "type": "boolean",
+            "title": "Capture Stderr",
+            "description": "Whether to capture and return stderr output.",
+            "default": true
+          },
+          "max_answer_chars": {
+            "type": "number",
+            "title": "Max Answer Chars",
+            "description": "If the output is longer than this number of characters,\nno content will be returned. -1 means using the default value, don't adjust unless there is no other way to get the content\nrequired for the task.",
+            "default": -1
+          }
+        },
+        "type": "object",
+        "required": [
+          "command"
+        ],
+        "title": "execute_shell_command_form_model"
+      },
+      "execute_shell_command_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "execute_shell_command_response_model"
+      },
+      "find_declaration_form_model": {
+        "properties": {
+          "relative_path": {
+            "type": "string",
+            "title": "Relative Path",
+            "description": "The relative path to the source file containing the symbol for which to find the declaration."
+          },
+          "regex": {
+            "type": "string",
+            "title": "Regex",
+            "description": "A regular expression with one group, where the group matches the symbol for which to perform the lookup.\nFor example, to find the declaration of the `process` method in a call like `obj.process()`,\npass an expression like \"obj\\.(process)\\(process_input_arg=37\\)\".\nPrefer regexes with sufficiently large context around the group to render the match unambiguous.\nUses Python syntax with MULTILINE and DOTALL flags enabled."
+          },
+          "containing_symbol_name_path": {
+            "type": "string",
+            "title": "Containing Symbol Name Path",
+            "description": "Optional name path of a containing symbol whose body shall be searched instead of the full file."
+          },
+          "include_body": {
+            "type": "boolean",
+            "title": "Include Body",
+            "description": "Whether to include the symbol's body in the result. Default False.",
+            "default": false
+          },
+          "include_info": {
+            "type": "boolean",
+            "title": "Include Info",
+            "description": "Whether to include additional info (hover-like). Default False.",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "relative_path",
+          "regex"
+        ],
+        "title": "find_declaration_form_model"
+      },
+      "find_declaration_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "find_declaration_response_model"
+      },
+      "find_file_form_model": {
+        "properties": {
+          "file_mask": {
+            "type": "string",
+            "title": "File Mask",
+            "description": "The filename or file mask (using the wildcards * or ?) to search for."
+          },
+          "relative_path": {
+            "type": "string",
+            "title": "Relative Path",
+            "description": "The relative path to the directory to search in; pass \".\" to scan the project root."
+          }
+        },
+        "type": "object",
+        "required": [
+          "file_mask",
+          "relative_path"
+        ],
+        "title": "find_file_form_model"
+      },
+      "find_file_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "find_file_response_model"
+      },
+      "find_implementations_form_model": {
+        "properties": {
+          "name_path": {
+            "type": "string",
+            "title": "Name Path",
+            "description": "The symbol's name path."
+          },
+          "relative_path": {
+            "type": "string",
+            "title": "Relative Path",
+            "description": "The relative path to the file containing the symbol for which to find implementations.\nNote that here you can't pass a directory but must pass a file."
+          },
+          "include_info": {
+            "type": "boolean",
+            "title": "Include Info",
+            "description": "Whether to include additional info (hover-like, typically including docstring and signature),\nabout the implementing symbols.",
+            "default": false
+          },
+          "include_kinds": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Include Kinds",
+            "description": "(optional) limits results to the given LSP symbol kinds (integers).",
+            "default": []
+          },
+          "exclude_kinds": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Exclude Kinds",
+            "description": "(optional) list of LSP symbol kinds (integers) to exclude.",
+            "default": []
+          },
+          "max_answer_chars": {
+            "type": "number",
+            "title": "Max Answer Chars",
+            "description": "Max result length; -1 for default.",
+            "default": -1
+          }
+        },
+        "type": "object",
+        "required": [
+          "name_path",
+          "relative_path"
+        ],
+        "title": "find_implementations_form_model"
+      },
+      "find_implementations_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "find_implementations_response_model"
+      },
+      "find_referencing_symbols_form_model": {
+        "properties": {
+          "name_path": {
+            "type": "string",
+            "title": "Name Path",
+            "description": "Name path of the symbol."
+          },
+          "relative_path": {
+            "type": "string",
+            "title": "Relative Path",
+            "description": "The relative path to the file containing the symbol for which to find references.\nNote: for external dependencies, this must be an identifier starting with `<ext` that you have received\nearlier (don't try to guess!)."
+          },
+          "include_kinds": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Include Kinds",
+            "description": "(optional) limits results to the given LSP symbol kinds (integers).",
+            "default": []
+          },
+          "exclude_kinds": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Exclude Kinds",
+            "description": "Optional list of LSP symbol kinds (integers) to exclude.",
+            "default": []
+          },
+          "max_answer_chars": {
+            "type": "number",
+            "title": "Max Answer Chars",
+            "description": "Max result length; -1 for default.",
+            "default": -1
+          }
+        },
+        "type": "object",
+        "required": [
+          "name_path",
+          "relative_path"
+        ],
+        "title": "find_referencing_symbols_form_model"
+      },
+      "find_referencing_symbols_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "find_referencing_symbols_response_model"
+      },
+      "find_symbol_form_model": {
+        "properties": {
+          "name_path_pattern": {
+            "type": "string",
+            "title": "Name Path Pattern",
+            "description": "The name path matching pattern (see above)."
+          },
+          "depth": {
+            "type": "number",
+            "title": "Depth",
+            "description": "Depth up to which descendants shall be retrieved (e.g. use 1 to also retrieve immediate children;\nfor the case where the symbol is a class, this will return its methods).\nIgnored if `include_body=True`. Default 0.",
+            "default": 0
+          },
+          "relative_path": {
+            "type": "string",
+            "title": "Relative Path",
+            "description": "(optional) restrict search to this file or directory. If None, searches entire codebase.\nIf a directory is passed, the search will be restricted to the files in that directory.\nIf a file is passed, the search will be restricted to that file.",
+            "default": ""
+          },
+          "include_body": {
+            "type": "boolean",
+            "title": "Include Body",
+            "description": "Whether to include the symbol's source code. Use judiciously.",
+            "default": false
+          },
+          "include_info": {
+            "type": "boolean",
+            "title": "Include Info",
+            "description": "Whether to include additional info (hover-like, typically including docstring and signature),\nabout the symbol (ignored if include_body is True). Info is never included for child symbols.\nNote: Depending on the language, this can be slow (e.g., C/C++).",
+            "default": false
+          },
+          "include_kinds": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Include Kinds",
+            "description": "(optional) limits results to the given LSP symbol kinds (integers).",
+            "default": []
+          },
+          "exclude_kinds": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Exclude Kinds",
+            "description": "(optional) list of LSP symbol kinds (integers) to exclude.",
+            "default": []
+          },
+          "substring_matching": {
+            "type": "boolean",
+            "title": "Substring Matching",
+            "description": "If True, use substring matching for the last element of the pattern, such that\n\"Foo/get\" would match \"Foo/getValue\" and \"Foo/getData\".",
+            "default": false
+          },
+          "max_matches": {
+            "type": "number",
+            "title": "Max Matches",
+            "description": "Maximum number of permitted matches. If exceeded, a shortened result is returned\nwhich allows refining the search. -1 (default) means no limit. Set to 1 if you search for a single symbol.",
+            "default": -1
+          },
+          "max_answer_chars": {
+            "type": "number",
+            "title": "Max Answer Chars",
+            "description": "Max result length; -1 for default.",
+            "default": -1
+          }
+        },
+        "type": "object",
+        "required": [
+          "name_path_pattern"
+        ],
+        "title": "find_symbol_form_model"
+      },
+      "find_symbol_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "find_symbol_response_model"
+      },
+      "get_diagnostics_for_file_form_model": {
+        "properties": {
+          "relative_path": {
+            "type": "string",
+            "title": "Relative Path",
+            "description": "The relative path to the file to inspect."
+          },
+          "start_line": {
+            "type": "number",
+            "title": "Start Line",
+            "description": "The first 0-based line to include. Defaults to 0.",
+            "default": 0
+          },
+          "end_line": {
+            "type": "number",
+            "title": "End Line",
+            "description": "The last 0-based line to include. Defaults to -1, which means until the end of the file.",
+            "default": -1
+          },
+          "min_severity": {
+            "type": "number",
+            "title": "Min Severity",
+            "description": "Minimum LSP severity to include, where 1=Error, 2=Warning, 3=Information, 4=Hint.\nDiagnostics with lower-or-equal numeric severity are returned.",
+            "default": 4
+          },
+          "max_answer_chars": {
+            "type": "number",
+            "title": "Max Answer Chars",
+            "description": "Max result length; -1 for default.",
+            "default": -1
+          }
+        },
+        "type": "object",
+        "required": [
+          "relative_path"
+        ],
+        "title": "get_diagnostics_for_file_form_model"
+      },
+      "get_diagnostics_for_file_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "get_diagnostics_for_file_response_model"
+      },
+      "get_symbols_overview_form_model": {
+        "properties": {
+          "relative_path": {
+            "type": "string",
+            "title": "Relative Path",
+            "description": "The relative path to the file to get the overview of."
+          },
+          "depth": {
+            "type": "number",
+            "title": "Depth",
+            "description": "Depth up to which descendants of top-level symbols shall be retrieved\n(e.g. 1 retrieves immediate children). Default 0.",
+            "default": 0
+          },
+          "max_answer_chars": {
+            "type": "number",
+            "title": "Max Answer Chars",
+            "description": "If the overview is longer than this number of characters,\nno content will be returned. -1 means the default value from the config will be used.\nDon't adjust unless there is really no other way to get the content required for the task.",
+            "default": -1
+          }
+        },
+        "type": "object",
+        "required": [
+          "relative_path"
+        ],
+        "title": "get_symbols_overview_form_model"
+      },
+      "get_symbols_overview_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "get_symbols_overview_response_model"
+      },
+      "insert_after_symbol_form_model": {
+        "properties": {
+          "name_path": {
+            "type": "string",
+            "title": "Name Path",
+            "description": "Name path of the symbol after which to insert content."
+          },
+          "relative_path": {
+            "type": "string",
+            "title": "Relative Path",
+            "description": "The relative path to the file containing the symbol."
+          },
+          "body": {
+            "type": "string",
+            "title": "Body",
+            "description": "The body/content to be inserted. The inserted code shall begin with the next line after\nthe symbol."
+          }
+        },
+        "type": "object",
+        "required": [
+          "name_path",
+          "relative_path",
+          "body"
+        ],
+        "title": "insert_after_symbol_form_model"
+      },
+      "insert_after_symbol_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "insert_after_symbol_response_model"
+      },
+      "insert_before_symbol_form_model": {
+        "properties": {
+          "name_path": {
+            "type": "string",
+            "title": "Name Path",
+            "description": "Name path of the symbol before which to insert content."
+          },
+          "relative_path": {
+            "type": "string",
+            "title": "Relative Path",
+            "description": "The relative path to the file containing the symbol."
+          },
+          "body": {
+            "type": "string",
+            "title": "Body",
+            "description": "The body/content to be inserted before the line in which the referenced symbol is defined."
+          }
+        },
+        "type": "object",
+        "required": [
+          "name_path",
+          "relative_path",
+          "body"
+        ],
+        "title": "insert_before_symbol_form_model"
+      },
+      "insert_before_symbol_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "insert_before_symbol_response_model"
+      },
+      "list_dir_form_model": {
+        "properties": {
+          "relative_path": {
+            "type": "string",
+            "title": "Relative Path",
+            "description": "The relative path to the directory to list; pass \".\" to scan the project root."
+          },
+          "recursive": {
+            "type": "boolean",
+            "title": "Recursive",
+            "description": "Whether to scan subdirectories recursively."
+          },
+          "skip_ignored_files": {
+            "type": "boolean",
+            "title": "Skip Ignored Files",
+            "description": "Whether to skip files and directories that are ignored.",
+            "default": false
+          },
+          "max_answer_chars": {
+            "type": "number",
+            "title": "Max Answer Chars",
+            "description": "If the output is longer than this number of characters,\nno content will be returned. -1 means the default value from the config will be used.\nDon't adjust unless there is really no other way to get the content required for the task.",
+            "default": -1
+          }
+        },
+        "type": "object",
+        "required": [
+          "relative_path",
+          "recursive"
+        ],
+        "title": "list_dir_form_model"
+      },
+      "list_dir_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "list_dir_response_model"
+      },
+      "list_memories_form_model": {
+        "properties": {
+          "topic": {
+            "type": "string",
+            "title": "Topic",
+            "description": "",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "title": "list_memories_form_model"
+      },
+      "list_memories_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "list_memories_response_model"
+      },
+      "read_file_form_model": {
+        "properties": {
+          "relative_path": {
+            "type": "string",
+            "title": "Relative Path",
+            "description": "The relative path to the file to read."
+          },
+          "start_line": {
+            "type": "number",
+            "title": "Start Line",
+            "description": "The 0-based index of the first line to be retrieved.",
+            "default": 0
+          },
+          "end_line": {
+            "type": "integer",
+            "title": "End Line",
+            "description": "The 0-based index of the last line to be retrieved (inclusive). If None, read until the end of the file."
+          },
+          "max_answer_chars": {
+            "type": "number",
+            "title": "Max Answer Chars",
+            "description": "If the file (chunk) is longer than this number of characters,\nno content will be returned. Don't adjust unless there is really no other way to get the content\nrequired for the task.",
+            "default": -1
+          }
+        },
+        "type": "object",
+        "required": [
+          "relative_path"
+        ],
+        "title": "read_file_form_model"
+      },
+      "read_file_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "read_file_response_model"
+      },
+      "read_memory_form_model": {
+        "properties": {
+          "memory_name": {
+            "type": "string",
+            "title": "Memory Name",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "memory_name"
+        ],
+        "title": "read_memory_form_model"
+      },
+      "read_memory_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "read_memory_response_model"
+      },
+      "rename_memory_form_model": {
+        "properties": {
+          "old_name": {
+            "type": "string",
+            "title": "Old Name",
+            "description": ""
+          },
+          "new_name": {
+            "type": "string",
+            "title": "New Name",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "old_name",
+          "new_name"
+        ],
+        "title": "rename_memory_form_model"
+      },
+      "rename_memory_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "rename_memory_response_model"
+      },
+      "rename_symbol_form_model": {
+        "properties": {
+          "name_path": {
+            "type": "string",
+            "title": "Name Path",
+            "description": "Name path of the symbol to rename."
+          },
+          "relative_path": {
+            "type": "string",
+            "title": "Relative Path",
+            "description": "The relative path to the file containing the symbol to rename."
+          },
+          "new_name": {
+            "type": "string",
+            "title": "New Name",
+            "description": "The new name for the symbol."
+          }
+        },
+        "type": "object",
+        "required": [
+          "name_path",
+          "relative_path",
+          "new_name"
+        ],
+        "title": "rename_symbol_form_model"
+      },
+      "rename_symbol_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "rename_symbol_response_model"
+      },
+      "replace_content_form_model": {
+        "properties": {
+          "relative_path": {
+            "type": "string",
+            "title": "Relative Path",
+            "description": "The relative path to the file."
+          },
+          "needle": {
+            "type": "string",
+            "title": "Needle",
+            "description": "The string or regex pattern to search for.\nIf `mode` is \"literal\", this string will be matched exactly.\nIf `mode` is \"regex\", this string will be treated as a regular expression (syntax of Python's `re` module,\nwith flags DOTALL and MULTILINE enabled)."
+          },
+          "repl": {
+            "type": "string",
+            "title": "Repl",
+            "description": "The replacement string (verbatim).\nIf mode is \"regex\", the string can contain backreferences to matched groups in the needle regex,\nspecified using the syntax $!1, $!2, etc. for groups 1, 2, etc."
+          },
+          "mode": {
+            "type": "string",
+            "title": "Mode",
+            "description": "Either \"literal\" or \"regex\", specifying how the `needle` parameter is to be interpreted."
+          },
+          "allow_multiple_occurrences": {
+            "type": "boolean",
+            "title": "Allow Multiple Occurrences",
+            "description": "Whether to allow matching and replacing multiple occurrences.\nIf false and multiple occurrences are found, an error will be returned.",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "relative_path",
+          "needle",
+          "repl",
+          "mode"
+        ],
+        "title": "replace_content_form_model"
+      },
+      "replace_content_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "replace_content_response_model"
+      },
+      "replace_symbol_body_form_model": {
+        "properties": {
+          "name_path": {
+            "type": "string",
+            "title": "Name Path",
+            "description": "Name path of the symbol whose body to replace."
+          },
+          "relative_path": {
+            "type": "string",
+            "title": "Relative Path",
+            "description": "The relative path to the file containing the symbol."
+          },
+          "body": {
+            "type": "string",
+            "title": "Body",
+            "description": "The new symbol body. The symbol body is the definition of a symbol\nin the programming language, including e.g. the signature line for functions.\nDepending on the language, it may or may not include a preceding docstring or other preceding annotations."
+          }
+        },
+        "type": "object",
+        "required": [
+          "name_path",
+          "relative_path",
+          "body"
+        ],
+        "title": "replace_symbol_body_form_model"
+      },
+      "replace_symbol_body_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "replace_symbol_body_response_model"
+      },
+      "safe_delete_symbol_form_model": {
+        "properties": {
+          "name_path_pattern": {
+            "type": "string",
+            "title": "Name Path Pattern",
+            "description": "Name path of the symbol to delete."
+          },
+          "relative_path": {
+            "type": "string",
+            "title": "Relative Path",
+            "description": "The relative path to the file containing the symbol to delete."
+          }
+        },
+        "type": "object",
+        "required": [
+          "name_path_pattern",
+          "relative_path"
+        ],
+        "title": "safe_delete_symbol_form_model"
+      },
+      "safe_delete_symbol_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "safe_delete_symbol_response_model"
+      },
+      "search_for_pattern_form_model": {
+        "properties": {
+          "substring_pattern": {
+            "type": "string",
+            "title": "Substring Pattern",
+            "description": "Regular expression to search for."
+          },
+          "context_lines_before": {
+            "type": "number",
+            "title": "Context Lines Before",
+            "description": "Number of context lines to include before each match.",
+            "default": 0
+          },
+          "context_lines_after": {
+            "type": "number",
+            "title": "Context Lines After",
+            "description": "Number of context lines to include after each match.",
+            "default": 0
+          },
+          "paths_include_glob": {
+            "type": "string",
+            "title": "Paths Include Glob",
+            "description": "Optional glob (relative to project root, e.g. ``\"src/**/*.ts\"``) restricting which files are searched.",
+            "default": ""
+          },
+          "paths_exclude_glob": {
+            "type": "string",
+            "title": "Paths Exclude Glob",
+            "description": "Optional glob to exclude files; takes precedence over `paths_include_glob`.",
+            "default": ""
+          },
+          "relative_path": {
+            "type": "string",
+            "title": "Relative Path",
+            "description": "Restricts the search to this file or subdirectory of the project root.",
+            "default": ""
+          },
+          "restrict_search_to_code_files": {
+            "type": "boolean",
+            "title": "Restrict Search To Code Files",
+            "description": "Whether to search only files containing analyzable code symbols\n(useful when looking for class/method definitions); otherwise also search non-code files.",
+            "default": false
+          },
+          "multiline": {
+            "type": "boolean",
+            "title": "Multiline",
+            "description": "Whether to apply multi-line matching (default: True), enabling the flags re.DOTALL and re.MULTILINE.",
+            "default": true
+          },
+          "max_answer_chars": {
+            "type": "number",
+            "title": "Max Answer Chars",
+            "description": "If the output exceeds this many characters, a progressively shortened summary is returned instead.\n``-1`` uses the configured default.",
+            "default": -1
+          }
+        },
+        "type": "object",
+        "required": [
+          "substring_pattern"
+        ],
+        "title": "search_for_pattern_form_model"
+      },
+      "search_for_pattern_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "search_for_pattern_response_model"
+      },
+      "write_memory_form_model": {
+        "properties": {
+          "memory_name": {
+            "type": "string",
+            "title": "Memory Name",
+            "description": "Memory name."
+          },
+          "content": {
+            "type": "string",
+            "title": "Content",
+            "description": "Memory content, utf8-encoded."
+          },
+          "max_chars": {
+            "type": "number",
+            "title": "Max Chars",
+            "description": "See other tools.",
+            "default": -1
+          }
+        },
+        "type": "object",
+        "required": [
+          "memory_name",
+          "content"
+        ],
+        "title": "write_memory_form_model"
+      },
+      "write_memory_response_model": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "write_memory_response_model"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}
